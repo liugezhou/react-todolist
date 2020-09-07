@@ -12,3 +12,9 @@ export const getDeleteList = ((index)=>({
   type:actionTypes.DLETE_LIST,
   index
 }))
+
+export const setInitialList = ((obj)=>({
+  type:actionTypes.INITIAL_LIST,
+  inputValue:obj.inputValue,
+  list:obj.list
+}))

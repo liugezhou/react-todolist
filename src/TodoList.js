@@ -1,8 +1,9 @@
 import React,{ Component } from 'react'
-import { Input,Button ,List} from 'antd';
 import 'antd/dist/antd.css';
 import store from './store';
-import * as creators from './store/actionCreators'
+import * as creators from './store/actionCreators';
+import TodoListUI from './TodoListUI';
+import axios from 'axios';
 class TodoList extends Component {
   constructor(props) {
     super(props);
@@ -10,32 +11,27 @@ class TodoList extends Component {
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleStoreChange =this.handleStoreChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleDeleteItem =  this.handleDeleteItem.bind(this)
     store.subscribe(this.handleStoreChange);
   }
   render(){
-    return(
-      <div style={{margin:"10px"}}>
-        <Input 
-          placeholder="todo info" 
-          style={{width:'300px'}} 
-          value={this.state.inputValue}
-          onChange={this.handleInputChange}  
-        />
-        <Button type="primary" onClick={this.handleSubmit}>提交 </Button>
-        <List
-          style={{marginTop:'10px',width:"350px"}}
-          bordered
-          dataSource={this.state.list}
-          renderItem={(item,index) => (
-            <List.Item onClick={this.handleDeleteItem.bind(this,index)}>
-              {item}
-            </List.Item>
-          )}
-        />
-      </div>
-    )
+    return (
+    <TodoListUI  
+        inputValue = { this.state.inputValue }
+        list = { this.state.list }
+        handleInputChange = { this.handleInputChange }
+        handleSubmit = { this.handleSubmit }
+        handleDeleteItem = { this.handleDeleteItem }
+    />)
   }
   
+  componentDidMount(){
+    axios.get('http://localhost:8989/todolist/list').then((res)=>{
+      const result = res.data
+      const action = creators.setInitialList(result);
+      store.dispatch(action);
+    })
+  }
   handleInputChange(e){
     const action = creators.getInputChangeAction(e.target.value);
     store.dispatch(action);

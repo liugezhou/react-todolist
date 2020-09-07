@@ -21,5 +21,10 @@ export default (state = defaultState, action) => {
     newState.inputValue='';
     return newState;
   }
+  if(Object.is(action.type,actiontypes.INITIAL_LIST)){
+    newState.list=[...action.list];
+    newState.inputValue=action.inputValue;
+    return newState;
+  }
   return state;
 }
