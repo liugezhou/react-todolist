@@ -3,6 +3,7 @@ import 'antd/dist/antd.css';
 import store from './store';
 import * as creators from './store/actionCreators';
 import TodoListUI from './TodoListUI';
+// import axios from 'axios';
 class TodoList extends Component {
   constructor(props) {
     super(props);
@@ -25,8 +26,18 @@ class TodoList extends Component {
   }
   
   componentDidMount(){
-    const action = creators.getTodoList();
+    // redux-saga
+    const action = creators.getInitialList();
     store.dispatch(action);
+    // redux-thunk
+    // const action = creators.getTodoList();
+    // store.dispatch(action);
+
+    // axios.get('http://localhost:8989/todolist/list').then((res)=>{
+    //   const data = res.data
+    //   const action = creators.setInitialList(data);
+    //   store.dispatch(action);
+    // })
   }
   handleInputChange(e){
     const action = creators.getInputChangeAction(e.target.value);
